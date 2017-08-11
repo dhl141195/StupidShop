@@ -6,7 +6,7 @@ import profileImage from '../../images/temp/profile.png';
 class Menu extends Component {
 
     state = {
-        isLogin: false
+        isLogin: true
     }
 
     goToOtherScreen = (screenName) => {

@@ -20,7 +20,7 @@ class Main extends Component {
                 openDrawerOffset={0.4}
                 tapToClose
             >
-                <View style={{ flex: 1, backgroundColor: '#57C1F8' }}>
+                <View style={{ flex: 1 }}>
                     <Header
                         openMenu={this.openMenu}
                     />
