@@ -1,78 +1,44 @@
-import React from 'react';
-import { TabNavigator } from 'react-navigation';
-import { StyleSheet, Image } from 'react-native';
+import React, { Component } from 'react';
 
-import HomeNav from './Home/HomeNav';
-import CartNav from './Cart/CartNav';
-import SearchNav from './Search/SearchNav';
-import Contact from './Contact/Contact';
+import ShopNav from './ShopNav';
 
-import homeIcon from '../../../images/appIcon/home0.png';
-import cartIcon from '../../../images/appIcon/cart0.png';
-import searchIcon from '../../../images/appIcon/search0.png';
-import contactIcon from '../../../images/appIcon/contact0.png';
+class Shop extends Component {
 
-const Shop = TabNavigator(
-    {
-        Home: {
-            screen: HomeNav,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        source={homeIcon}
-                        style={[styles.icon, { tintColor }]}
-                    />
-                )
-            }
-        },
-        Cart: {
-            screen: CartNav,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        source={cartIcon}
-                        style={[styles.icon, { tintColor }]}
-                    />
-                )
-            }
-        },
-        Search: {
-            screen: SearchNav,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        source={searchIcon}
-                        style={[styles.icon, { tintColor }]}
-                    />
-                )
-            }
-        },
-        Contact: {
-            screen: Contact,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor }) => (
-                    <Image
-                        source={contactIcon}
-                        style={[styles.icon, { tintColor }]}
-                    />
-                )
-            }
-        }
-    }, {
-        tabBarOptions: {
-            activeTintColor: '#49C28E',
-            labelStyle: {
-                fontFamily: 'Avenir'
-            }
-        }
+    state = {
+        types: [],
+        topProducts: [],
+        cartArray: []
     }
-);
 
-const styles = StyleSheet.create({
-    icon: {
-        height: 30,
-        width: 30
+    componentDidMount = () => {
+        fetch('http://127.0.0.1/api')
+            .then(response => response.json())
+            .then(responseData => {
+                this.setState({
+                    types: responseData.type,
+                    topProducts: responseData.product
+                });
+            });
     }
-});
+
+    addToCart = (product) => {
+        this.setState(prevState => ({
+            cartArray: prevState.cartArray.concat(product)
+        }));
+    }
+
+    render() {
+        const { types, topProducts } = this.state;
+        const screenProps = {
+            types,
+            topProducts,
+            addToCart: this.addToCart
+        };
+
+        return (
+            <ShopNav screenProps={screenProps} />
+        );
+    }
+}
 
 export default Shop;

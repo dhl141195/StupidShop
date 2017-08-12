@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    Dimensions,
+    TouchableOpacity,
+    FlatList
+} from 'react-native';
 
-import sp1 from '../../../../images/temp/sp1.jpeg';
-import sp2 from '../../../../images/temp/sp2.jpeg';
-import sp3 from '../../../../images/temp/sp3.jpeg';
-import sp4 from '../../../../images/temp/sp4.jpeg';
+const url = 'http://127.0.0.1/api/images/product/';
 
 class TopProduct extends Component {
 
-    moveToProductDetail = () => {
-        this.props.navigation.navigate('ProductDetail');
+    moveToProductDetail = (product) => {
+        this.props.navigation.navigate('ProductDetail', {
+            product
+        });
     }
 
     render() {
@@ -17,12 +24,11 @@ class TopProduct extends Component {
             container,
             titleContainer,
             title,
-            body,
+            columnWrapper,
             productContainer,
             productImage,
             productName,
-            productPrice,
-            divider
+            productPrice
         } = styles;
 
         return (
@@ -32,40 +38,26 @@ class TopProduct extends Component {
                         Top Product
                     </Text>
                 </View>
-                <View style={body}>
-                    <TouchableOpacity
-                        style={productContainer}
-                        onPress={this.moveToProductDetail}
-                    >
-                        <Image source={sp1} style={productImage} />
-                        <Text style={productName}>PRODUCT NAME</Text>
-                        <Text style={productPrice}>250$</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={productContainer}
-                        onPress={this.moveToProductDetail}
-                    >
-                        <Image source={sp2} style={productImage} />
-                        <Text style={productName}>PRODUCT NAME</Text>
-                        <Text style={productPrice}>300$</Text>
-                    </TouchableOpacity>
-                    <View style={divider} />
-                    <TouchableOpacity
-                        style={productContainer}
-                        onPress={this.moveToProductDetail}
-                    >
-                        <Image source={sp3} style={productImage} />
-                        <Text style={productName}>PRODUCT NAME</Text>
-                        <Text style={productPrice}>250$</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={productContainer}
-                        onPress={this.moveToProductDetail}
-                    >
-                        <Image source={sp4} style={productImage} />
-                        <Text style={productName}>PRODUCT NAME</Text>
-                        <Text style={productPrice}>300$</Text>
-                    </TouchableOpacity>
+                <View>
+                    <FlatList
+                        numColumns={2}
+                        keyExtractor={item => item.id}
+                        columnWrapperStyle={columnWrapper}
+                        data={this.props.topProducts}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={productContainer}
+                                onPress={() => this.moveToProductDetail(item)}
+                            >
+                                <Image
+                                    source={{ uri: url + item.images[0] }}
+                                    style={productImage}
+                                />
+                                <Text style={productName}>{item.name.toUpperCase()}</Text>
+                                <Text style={productPrice}>{item.price}$</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
                 </View>
             </View>
         );
@@ -97,18 +89,17 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
 
-    body: {
+    columnWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        paddingBottom: 10
+        marginBottom: 15
     },
 
     productContainer: {
         width: productImageWidth,
         shadowColor: '#352D32',
         shadowOffset: { width: 2, height: 3 },
-        shadowOpacity: 0.2
+        shadowOpacity: 0.2,
     },
 
     productImage: {

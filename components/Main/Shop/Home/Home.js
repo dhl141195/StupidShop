@@ -7,15 +7,23 @@ import TopProduct from './TopProduct';
 
 
 class Home extends Component {
+
     render() {
         const { navigation } = this.props;
+        const { types, topProducts } = this.props.screenProps;
         const { container } = styles;
 
         return (
             <ScrollView style={container}>
                 <Collection navigation={navigation} />
-                <Category navigation={navigation} />
-                <TopProduct navigation={navigation} />
+                <Category
+                    navigation={navigation}
+                    types={types}
+                />
+                <TopProduct
+                    navigation={navigation}
+                    topProducts={topProducts}
+                />
             </ScrollView>
         );
     }
