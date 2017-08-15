@@ -6,7 +6,7 @@ import profileImage from '../../images/temp/profile.png';
 class Menu extends Component {
 
     state = {
-        isLogin: true
+        isLoggedin: false
     }
 
     goToOtherScreen = (screenName) => {
@@ -71,7 +71,7 @@ class Menu extends Component {
         return (
             <View style={container}>
                 <Image style={avatar} source={profileImage} />
-                {this.state.isLogin ?
+                {this.state.isLoggedIn ?
                     loginJsx
                     :
                     logoutJsx

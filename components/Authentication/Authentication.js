@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 import backIcon from '../../images/appIcon/back_white.png';
 import logoIcon from '../../images/appIcon/ic_logo.png';
@@ -37,53 +40,10 @@ class Authentication extends Component {
             signInStyle,
             signUpStyle,
             activeStyle,
-            inactiveStyle,
-            inputStyle,
-            bigButton,
-            bigButtonText
+            inactiveStyle
         } = styles;
 
         const { isSignIn } = this.state;
-
-        const signInJsx = (
-            <View>
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Enter your email"
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Enter your password"
-                />
-                <TouchableOpacity style={bigButton}>
-                    <Text style={bigButtonText}>SIGN IN NOW</Text>
-                </TouchableOpacity>
-            </View>
-        );
-
-        const signUpJsx = (
-            <View>
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Enter your name"
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Enter your email"
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Enter your password"
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Re-enter your password"
-                />
-                <TouchableOpacity style={bigButton}>
-                    <Text style={bigButtonText}>SIGN UP NOW</Text>
-                </TouchableOpacity>
-            </View>
-        );
 
         return (
             <View style={container}>
@@ -97,9 +57,9 @@ class Authentication extends Component {
                     <Image style={iconStyle} source={logoIcon} />
                 </View>
                 {isSignIn ?
-                    signInJsx
+                    <SignIn />
                     :
-                    signUpJsx
+                    <SignUp signIn={this.signIn} />
                 }
                 <View />
                 <View />
@@ -184,30 +144,6 @@ const styles = StyleSheet.create({
 
     inactiveStyle: {
         color: '#E3E2E0'
-    },
-
-    inputStyle: {
-        height: 50,
-        backgroundColor: '#fff',
-        marginBottom: 15,
-        paddingLeft: 30,
-        borderRadius: 10
-    },
-
-    bigButton: {
-        height: 50,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
-    bigButtonText: {
-        color: '#fff',
-        fontFamily: 'Avenir',
-        fontSize: 17,
-        fontWeight: '500'
     }
 });
 
