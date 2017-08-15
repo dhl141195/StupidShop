@@ -10,7 +10,7 @@ const url = 'http://127.0.0.1/api/images/product/';
 
 export default class ProductDetail extends Component {
 
-    goBack() {
+    goBack = () => {
         this.props.navigation.goBack();
     }
 
@@ -99,7 +99,7 @@ export default class ProductDetail extends Component {
 }
 
 const { width } = Dimensions.get('window');
-const swiperWidth = (width / 1.8) - 30;
+const swiperWidth = (width - 75) / 2;
 const swiperHeight = (swiperWidth * 452) / 361;
 
 const styles = StyleSheet.create({
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         flex: 6,
         alignItems: 'center',
         flexDirection: 'row',
-        marginHorizontal: 10
+        paddingHorizontal: 10
     },
     textMain: {
         paddingLeft: 20,

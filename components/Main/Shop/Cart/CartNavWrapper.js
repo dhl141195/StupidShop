@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import Cart from './Cart';
@@ -13,4 +14,12 @@ const CartNav = StackNavigator(
     }
 );
 
-export default CartNav;
+class CartNavWrapper extends Component {
+    render() {
+        return (
+            <CartNav screenProps={this.props.screenProps} />
+        );
+    }
+}
+
+export default CartNavWrapper;

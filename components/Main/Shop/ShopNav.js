@@ -1,9 +1,9 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
-import { StyleSheet, Image, Text } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
 import HomeNav from './Home/HomeNav';
-import CartNav from './Cart/CartNav';
+import CartNavWrapper from './Cart/CartNavWrapper';
 import SearchNav from './Search/SearchNav';
 import Contact from './Contact/Contact';
 
@@ -26,7 +26,7 @@ const ShopNav = TabNavigator(
             }
         },
         Cart: {
-            screen: CartNav,
+            screen: CartNavWrapper,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
                     <Image
