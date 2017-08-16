@@ -38,7 +38,6 @@ class Shop extends Component {
     }
 
     increaseQuantity = (productId) => {
-        console.log(new Date().getSeconds());
         const { cartArray } = this.state;
         const newCartArray = cartArray.map(item => {
             if (item.product.id === productId) {
@@ -98,6 +97,7 @@ class Shop extends Component {
             types,
             topProducts,
             cartArray,
+            listProducts: this.props.listProducts,
             addToCart: this.addToCart,
             increaseQuantity: this.increaseQuantity,
             decreaseQuantity: this.decreaseQuantity,

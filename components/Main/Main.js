@@ -14,7 +14,8 @@ import checkLogin from '../../api/checkLogin';
 class Main extends Component {
 
     state = {
-        user: null
+        user: null,
+        listProducts: []
     }
 
     componentDidMount() {
@@ -41,6 +42,11 @@ class Main extends Component {
         });
     }
 
+    updateListProducts = (listProducts) => {
+        this.setState({
+            listProducts
+        });
+    }
 
     openMenu = () => {
         this.drawer.open();
@@ -64,8 +70,9 @@ class Main extends Component {
                 <View style={{ flex: 1 }}>
                     <Header
                         openMenu={this.openMenu}
+                        updateListProducts={this.updateListProducts}
                     />
-                    <Shop />
+                    <Shop listProducts={this.state.listProducts} />
                 </View>
             </Drawer>
         );

@@ -4,7 +4,7 @@ import { StyleSheet, Image } from 'react-native';
 
 import HomeNav from './Home/HomeNav';
 import CartNavWrapper from './Cart/CartNavWrapper';
-import SearchNav from './Search/SearchNav';
+import SearchNavWrapper from './Search/SearchNavWrapper';
 import Contact from './Contact/Contact';
 
 import homeIcon from '../../../images/appIcon/home0.png';
@@ -37,7 +37,7 @@ const ShopNav = TabNavigator(
             }
         },
         Search: {
-            screen: SearchNav,
+            screen: SearchNavWrapper,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
                     <Image

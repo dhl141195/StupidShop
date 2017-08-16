@@ -12,7 +12,27 @@ import {
 import logoIcon from '../../images/appIcon/ic_logo.png';
 import menuIcon from '../../images/appIcon/ic_menu.png';
 
+import global from '../../global';
+import searchProduct from '../../api/searchProduct';
+
 class Header extends Component {
+
+    state = {
+        txtSearch: ''
+    }
+
+    onSearch = () => {
+        searchProduct(this.state.txtSearch)
+            .then(productArr => this.props.updateListProducts(productArr))
+            .catch(error => console.log(error));
+
+        this.setState({
+            txtSearch: ''
+        });
+
+        global.goToSearch();
+    }
+
     render() {
         const { wrapper, row, textInput, iconStyle, titleStyle } = styles;
         return (
@@ -29,6 +49,9 @@ class Header extends Component {
                 <TextInput
                     style={textInput}
                     placeholder="What do  you want to buy?"
+                    value={this.state.txtSearch}
+                    onChangeText={text => this.setState({ txtSearch: text })}
+                    onSubmitEditing={this.onSearch}
                 />
             </View>
         );

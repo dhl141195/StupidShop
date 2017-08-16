@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import Search from './Search';
@@ -13,4 +14,12 @@ const SearchNav = StackNavigator(
     }
 );
 
-export default SearchNav;
+class SearchNavWrapper extends Component {
+    render() {
+        return (
+            <SearchNav screenProps={this.props.screenProps} />
+        );
+    }
+}
+
+export default SearchNavWrapper;

@@ -5,8 +5,18 @@ import Collection from './Collection';
 import Category from './Category';
 import TopProduct from './TopProduct';
 
+import global from '../../../../global';
 
 class Home extends Component {
+
+    constructor(props) {
+        super(props);
+        global.goToSearch = this.goToSearch;
+    }
+
+    goToSearch = () => {
+        this.props.navigation.navigate('Search');
+    }
 
     render() {
         const { navigation } = this.props;
