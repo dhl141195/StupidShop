@@ -17,6 +17,14 @@ class Menu extends Component {
         });
     }
 
+    goToChangeInfo = () => {
+        const { navigate } = this.props.navigation;
+        navigate('ChangeInfo', {
+            user: this.props.user,
+            onLogin: this.props.onLogin
+        });
+    }
+
     render() {
         const {
             container,
@@ -30,13 +38,13 @@ class Menu extends Component {
             logoutContainer
         } = styles;
 
-        const { user } = this.props;
+        const { user, onLogout } = this.props;
 
         const logoutJsx = (
             <View style={logoutContainer}>
                 <TouchableOpacity
                     style={button}
-                    onPress={() => this.goToAuthentication()}
+                    onPress={this.goToAuthentication}
                 >
                     <Text style={buttonText}>SIGN IN</Text>
                 </TouchableOpacity>
@@ -57,13 +65,13 @@ class Menu extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={btnSignInStyle}
-                        onPress={() => this.goToOtherScreen('ChangeInfo')}
+                        onPress={this.goToChangeInfo}
                     >
                         <Text style={btnTextSignIn}>Change Info</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={btnSignInStyle}
-                        onPress={() => this.goToOtherScreen('Authentication')}
+                        onPress={onLogout}
                     >
                         <Text style={btnTextSignIn}>Sign out</Text>
                     </TouchableOpacity>

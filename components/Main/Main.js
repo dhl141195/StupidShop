@@ -8,6 +8,7 @@ import Menu from './Menu';
 
 import getToken from '../../api/getToken';
 import saveToken from '../../api/saveToken';
+import removeToken from '../../api/removeToken';
 import checkLogin from '../../api/checkLogin';
 
 class Main extends Component {
@@ -20,14 +21,23 @@ class Main extends Component {
         getToken()
             .then(token => checkLogin(token))
             .then(result => {
+                if (!result) throw new Error('error');
                 saveToken(result.token);
                 this.onLogin(result.user);
-            });
+            })
+            .catch(error => console.log(error));
     }
 
     onLogin = (user) => {
         this.setState({
             user
+        });
+    }
+
+    onLogout = () => {
+        removeToken();
+        this.setState({
+            user: null
         });
     }
 
@@ -45,6 +55,7 @@ class Main extends Component {
                         navigation={this.props.navigation}
                         user={this.state.user}
                         onLogin={this.onLogin}
+                        onLogout={this.onLogout}
                     />
                 }
                 openDrawerOffset={0.4}

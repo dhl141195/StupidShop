@@ -1,16 +1,46 @@
 import React, { Component } from 'react';
 import {
-    View, TouchableOpacity, Text, Image, StyleSheet, TextInput
+    View, TouchableOpacity, Text, Image, StyleSheet, TextInput,
+    Alert
 } from 'react-native';
+
+import getToken from '../../api/getToken';
+import changeInfo from '../../api/changeInfo';
+
 import backIcon from '../../images/appIcon/back.png';
 
 export default class ChangeInfo extends Component {
 
-    state = {
-        txtName: 'Nguyen Van Pho',
-        txtAddress: '92 Le Thi Rieng / Ben Thanh',
-        txtPhone: '01694472176'
-    };
+    constructor(props) {
+        super(props);
+
+        const { name, address, phone } = this.props.navigation.state.params.user;
+        this.state = {
+            name,
+            address,
+            phone
+        };
+    }
+
+    onChangeInfo = () => {
+        const { name, address, phone } = this.state;
+        getToken()
+            .then(token => changeInfo(token, name, address, phone))
+            .then(user => {
+                this.onSuccess();
+                this.props.navigation.state.params.onLogin(user);
+            })
+            .catch(error => console.log(error));
+    }
+
+    onSuccess = () => {
+        Alert.alert(
+            'Congratulation',
+            'Update info successful',
+            [{ text: 'OK', onPress: () => this.goBackToMain() }],
+            { cancelable: false }
+        );
+    }
 
     goBackToMain() {
         this.props.navigation.goBack();
@@ -21,7 +51,7 @@ export default class ChangeInfo extends Component {
             wrapper, header, headerTitle, backIconStyle, body,
             signInContainer, signInTextStyle, textInput
         } = styles;
-        
+
         const { name, address, phone } = this.state;
 
         return (
@@ -39,23 +69,26 @@ export default class ChangeInfo extends Component {
                         placeholder="Enter your name"
                         autoCapitalize="none"
                         value={name}
-                        onChangeText={txtName => this.setState({ ...this.state, txtName })}
+                        onChangeText={txtName => this.setState({ name: txtName })}
                     />
                     <TextInput
                         style={textInput}
                         placeholder="Enter your address"
                         autoCapitalize="none"
                         value={address}
-                        onChangeText={txtAddress => this.setState({ ...this.state, txtAddress })}
+                        onChangeText={txtAddress => this.setState({ address: txtAddress })}
                     />
                     <TextInput
                         style={textInput}
                         placeholder="Enter your phone number"
                         autoCapitalize="none"
                         value={phone}
-                        onChangeText={txtPhone => this.setState({ ...this.state, txtPhone })}
+                        onChangeText={txtPhone => this.setState({ phone: txtPhone })}
                     />
-                    <TouchableOpacity style={signInContainer}>
+                    <TouchableOpacity
+                        style={signInContainer}
+                        onPress={this.onChangeInfo}
+                    >
                         <Text style={signInTextStyle}>CHANGE YOUR INFOMATION</Text>
                     </TouchableOpacity>
                 </View>
