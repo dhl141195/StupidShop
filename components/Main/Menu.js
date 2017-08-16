@@ -5,13 +5,16 @@ import profileImage from '../../images/temp/profile.png';
 
 class Menu extends Component {
 
-    state = {
-        isLoggedin: false
-    }
-
     goToOtherScreen = (screenName) => {
         const { navigate } = this.props.navigation;
         navigate(screenName);
+    }
+
+    goToAuthentication = () => {
+        const { navigate } = this.props.navigation;
+        navigate('Authentication', {
+            onLogin: this.props.onLogin
+        });
     }
 
     render() {
@@ -27,11 +30,13 @@ class Menu extends Component {
             logoutContainer
         } = styles;
 
+        const { user } = this.props;
+
         const logoutJsx = (
             <View style={logoutContainer}>
                 <TouchableOpacity
                     style={button}
-                    onPress={() => this.goToOtherScreen('Authentication')}
+                    onPress={() => this.goToAuthentication()}
                 >
                     <Text style={buttonText}>SIGN IN</Text>
                 </TouchableOpacity>
@@ -41,7 +46,7 @@ class Menu extends Component {
         const loginJsx = (
             <View style={loginContainer}>
                 <Text style={userName}>
-                    Đặng Hoàng Long
+                    {user ? user.name : 'USERNAME'}
                 </Text>
                 <View>
                     <TouchableOpacity
@@ -71,7 +76,7 @@ class Menu extends Component {
         return (
             <View style={container}>
                 <Image style={avatar} source={profileImage} />
-                {this.state.isLoggedIn ?
+                {user ?
                     loginJsx
                     :
                     logoutJsx

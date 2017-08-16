@@ -44,6 +44,7 @@ class Authentication extends Component {
         } = styles;
 
         const { isSignIn } = this.state;
+        const { onLogin } = this.props.navigation.state.params;
 
         return (
             <View style={container}>
@@ -57,7 +58,10 @@ class Authentication extends Component {
                     <Image style={iconStyle} source={logoIcon} />
                 </View>
                 {isSignIn ?
-                    <SignIn />
+                    <SignIn
+                        onLogin={onLogin}
+                        goBackToMain={this.goBackToMain}
+                    />
                     :
                     <SignUp signIn={this.signIn} />
                 }

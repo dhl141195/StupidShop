@@ -1,25 +1,78 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 
-const SignIn = () => {
-    const { inputStyle, bigButton, bigButtonText } = styles;
-    
-    return (
-        <View>
-            <TextInput
-                style={inputStyle}
-                placeholder="Enter your email"
-            />
-            <TextInput
-                style={inputStyle}
-                placeholder="Enter your password"
-            />
-            <TouchableOpacity style={bigButton}>
-                <Text style={bigButtonText}>SIGN IN NOW</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
+import saveToken from '../../api/saveToken';
+import getToken from '../../api/getToken';
+import login from '../../api/login';
+
+
+class SignIn extends Component {
+
+    state = {
+        email: '',
+        password: '',
+        token: ''
+    }
+
+    componentDidMount() {
+        getToken()
+            .then(token => this.setState({ token }));
+    }
+
+
+    onSignIn = () => {
+        const { email, password } = this.state;
+        const { onLogin, goBackToMain } = this.props;
+        login(email, password)
+            .then(result => {
+                saveToken(result.token);
+                onLogin(result.user);
+                goBackToMain();
+            })
+            .catch(() => {
+                Alert.alert(
+                    'Oops!',
+                    'Sign in failed',
+                    [
+                        {
+                            text: 'Retry',
+                            onPress: () => this.setState({ password: '' })
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            });
+    }
+
+    render() {
+        const { email, password } = this.state;
+        const { inputStyle, bigButton, bigButtonText } = styles;
+
+        return (
+            <View>
+                <TextInput
+                    style={inputStyle}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChangeText={emailTxt => this.setState({ email: emailTxt })}
+                />
+                <TextInput
+                    style={inputStyle}
+                    placeholder="Enter your password"
+                    value={password}
+                    secureTextEntry
+                    onChangeText={passwordTxt => this.setState({ password: passwordTxt })}
+                />
+                <TouchableOpacity
+                    style={bigButton}
+                    onPress={this.onSignIn}
+                >
+                    <Text style={bigButtonText}>SIGN IN NOW</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
 
