@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-const url = 'http://127.0.0.1/api/images/type/';
+const url = 'http://192.168.0.103/api/images/type/';
 
 class Category extends Component {
 
-    moveToListProduct = () => {
-        this.props.navigation.navigate('ListProduct');
+    moveToListProduct = (category) => {
+        this.props.navigation.navigate('ListProduct', { category });
     }
 
     render() {
@@ -26,7 +26,10 @@ class Category extends Component {
                         height={imageHeight}
                     >
                         {types.map(type => (
-                            <TouchableOpacity key={type.id} onPress={this.moveToListProduct}>
+                            <TouchableOpacity
+                                key={type.id}
+                                onPress={() => this.moveToListProduct(type)}
+                            >
                                 <Image
                                     style={imageStyle}
                                     source={{ uri: url + type.image }}

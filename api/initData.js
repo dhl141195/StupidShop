@@ -1,5 +1,5 @@
 const initData = () => (
-    fetch('http://127.0.0.1/api')
+    fetch('http://192.168.0.103/api')
         .then(res => res.json())
 );
 

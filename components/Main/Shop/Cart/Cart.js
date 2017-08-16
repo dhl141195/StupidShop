@@ -4,7 +4,7 @@ import {
     Dimensions, StyleSheet, Image
 } from 'react-native';
 
-const url = 'http://127.0.0.1/api/images/product/';
+const url = 'http://192.168.0.103/api/images/product/';
 
 function toTitleCase(str) {
     return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
@@ -12,8 +12,8 @@ function toTitleCase(str) {
 
 class Cart extends Component {
 
-    gotoDetail() {
-        this.props.navigation.navigate('ProductDetail');
+    gotoDetail(product) {
+        this.props.navigation.navigate('ProductDetail', { product });
     }
 
     render() {
@@ -73,18 +73,21 @@ class Cart extends Component {
                                 <View style={productController}>
                                     <View style={numberOfProduct}>
                                         <TouchableOpacity
-                                            onPress={() => increaseQuantity(item.product.id)}
-                                        >
-                                            <Text>+</Text>
-                                        </TouchableOpacity>
-                                        <Text>{item.quantity}</Text>
-                                        <TouchableOpacity
                                             onPress={() => decreaseQuantity(item.product.id)}
                                         >
                                             <Text>-</Text>
                                         </TouchableOpacity>
+                                        <Text>{item.quantity}</Text>
+                                        <TouchableOpacity
+                                            onPress={() => increaseQuantity(item.product.id)}
+                                        >
+                                            <Text>+</Text>
+                                        </TouchableOpacity>
                                     </View>
-                                    <TouchableOpacity style={showDetailContainer}>
+                                    <TouchableOpacity
+                                        style={showDetailContainer}
+                                        onPress={() => this.gotoDetail(item.product)}
+                                    >
                                         <Text style={txtShowDetail}>SHOW DETAILS</Text>
                                     </TouchableOpacity>
                                 </View>

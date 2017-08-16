@@ -1,13 +1,53 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    ListView,
+    RefreshControl
+} from 'react-native';
+
+import getListProduct from '../../../../api/getListProduct';
 
 import backIcon from '../../../../images/appIcon/backList.png';
-import sp1 from '../../../../images/temp/sp1.jpeg';
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
+const url = 'http://192.168.0.103/api/images/product/';
 
 class ListProduct extends Component {
 
-    gotoProductDetail = () => {
-        this.props.navigation.navigate('ProductDetail');
+    constructor(props) {
+        super(props);
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        this.state = {
+            listProducts: ds,
+            refreshing: false,
+            page: 1
+        };
+        this.arr = [];
+    }
+
+    componentDidMount() {
+        const { id } = this.props.navigation.state.params.category;
+        const { listProducts, page } = this.state;
+        getListProduct(id, page)
+            .then(productArr => {
+                this.arr = productArr;
+                this.setState({
+                    listProducts: listProducts.cloneWithRows(this.arr)
+                });
+            })
+            .catch(error => console.log(error));
+    }
+
+
+    gotoProductDetail = (product) => {
+        this.props.navigation.navigate('ProductDetail', { product });
     }
 
     goBack = () => {
@@ -33,77 +73,77 @@ class ListProduct extends Component {
             colorIcon
         } = styles;
 
+        const { category } = this.props.navigation.state.params;
+        const { listProducts, refreshing, page } = this.state;
+
         return (
             <View style={container}>
-                <ScrollView style={wrapper}>
+                <View style={wrapper}>
                     <View style={header}>
                         <TouchableOpacity onPress={this.goBack}>
                             <Image source={backIcon} style={backStyle} />
                         </TouchableOpacity>
-                        <Text style={titleStyle}>Party Dress</Text>
+                        <Text style={titleStyle}>{category.name}</Text>
                         <View style={{ width: 30 }} />
                     </View>
-                    <View style={productContainer}>
-                        <Image source={sp1} style={productImage} />
-                        <View style={productInfo}>
-                            <Text style={textName}>Lace Sleeve Si</Text>
-                            <Text style={textPrice}>117$</Text>
-                            <Text style={textMaterial}>Material silk</Text>
-                            <View style={lastRow}>
-                                <Text style={textColor}>Color RoyalBlue</Text>
-                                <View style={colorIcon} />
-                                <TouchableOpacity>
-                                    <Text style={textShowDetail}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
+                    <ListView
+                        removeClippedSubviews={false}
+                        dataSource={listProducts}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={() => {
+                                    this.setState({ refreshing: true });
+                                    getListProduct(category.id, page + 1)
+                                        .then(productArr => {
+                                            this.arr = productArr.concat(this.arr);
+                                            this.setState({
+                                                listProducts: listProducts.cloneWithRows(this.arr),
+                                                refreshing: false,
+                                                page: page + 1
+                                            });
+                                        })
+                                        .catch(error => {
+                                            console.log(error);
+                                            this.setState({
+                                                refreshing: false
+                                            });
+                                        });
+                                }}
+                            />
+                        }
+                        renderRow={product => (
+                            <View style={productContainer}>
+                                <Image
+                                    source={{ uri: url + product.images[0] }}
+                                    style={productImage}
+                                />
+                                <View style={productInfo}>
+                                    <Text style={textName}>{toTitleCase(product.name)}</Text>
+                                    <Text style={textPrice}>{product.price}$</Text>
+                                    <Text style={textMaterial}>
+                                        Material {toTitleCase(product.material)}
+                                    </Text>
+                                    <View style={lastRow}>
+                                        <Text style={textColor}>
+                                            Color {toTitleCase(product.color)}
+                                        </Text>
+                                        <View
+                                            style={[colorIcon, {
+                                                backgroundColor: product.color.toLowerCase()
+                                            }]}
+                                        />
+                                        <TouchableOpacity
+                                            onPress={() => this.gotoProductDetail(product)}
+                                        >
+                                            <Text style={textShowDetail}>SHOW DETAILS</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                             </View>
-                        </View>
-                    </View>
-                    <View style={productContainer}>
-                        <Image source={sp1} style={productImage} />
-                        <View style={productInfo}>
-                            <Text style={textName}>Lace Sleeve Si</Text>
-                            <Text style={textPrice}>117$</Text>
-                            <Text style={textMaterial}>Material silk</Text>
-                            <View style={lastRow}>
-                                <Text style={textColor}>Color RoyalBlue</Text>
-                                <View style={colorIcon} />
-                                <TouchableOpacity>
-                                    <Text style={textShowDetail}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={productContainer}>
-                        <Image source={sp1} style={productImage} />
-                        <View style={productInfo}>
-                            <Text style={textName}>Lace Sleeve Si</Text>
-                            <Text style={textPrice}>117$</Text>
-                            <Text style={textMaterial}>Material silk</Text>
-                            <View style={lastRow}>
-                                <Text style={textColor}>Color RoyalBlue</Text>
-                                <View style={colorIcon} />
-                                <TouchableOpacity>
-                                    <Text style={textShowDetail}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={productContainer}>
-                        <Image source={sp1} style={productImage} />
-                        <View style={productInfo}>
-                            <Text style={textName}>Lace Sleeve Si</Text>
-                            <Text style={textPrice}>117$</Text>
-                            <Text style={textMaterial}>Material silk</Text>
-                            <View style={lastRow}>
-                                <Text style={textColor}>Color RoyalBlue</Text>
-                                <View style={colorIcon} />
-                                <TouchableOpacity>
-                                    <Text style={textShowDetail}>SHOW DETAILS</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </ScrollView>
+                        )}
+                    />
+                </View>
             </View>
         );
     }
@@ -201,7 +241,6 @@ const styles = StyleSheet.create({
         height: 16,
         width: 16,
         borderRadius: 8,
-        backgroundColor: 'red'
     }
 });
 

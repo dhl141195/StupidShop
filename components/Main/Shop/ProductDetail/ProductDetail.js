@@ -6,7 +6,7 @@ import {
 const back = require('../../../../images/appIcon/back.png');
 const cart = require('../../../../images/appIcon/cartfull.png');
 
-const url = 'http://127.0.0.1/api/images/product/';
+const url = 'http://192.168.0.103/api/images/product/';
 
 export default class ProductDetail extends Component {
 
